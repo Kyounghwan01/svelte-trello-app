@@ -7,9 +7,14 @@
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear"
   },
+  "browerslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "autoprefixer": "^9.8.6",
     "node-sass": "^5.0.0",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^3.1.0",

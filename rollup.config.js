@@ -47,7 +47,13 @@ export default {
         // enable run-time checks when not in production
         dev: !production
       },
-      preprocess: sveltePreprocess()
+      // 전처리
+      preprocess: sveltePreprocess({
+        // css 번들 이후 처리
+        postcss: {
+          plugins: [require("autoprefixer")()]
+        }
+      })
     }),
     // we'll extract any component CSS out into
     // a separate file - better for performance
