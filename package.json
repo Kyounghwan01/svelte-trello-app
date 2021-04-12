@@ -12,6 +12,7 @@
     "last 2 versions"
   ],
   "devDependencies": {
+    "@rollup/plugin-alias": "^3.1.2",
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "autoprefixer": "^9.8.6",

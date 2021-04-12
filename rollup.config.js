@@ -1,5 +1,7 @@
+import path from "path";
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
+import alias from "@rollup/plugin-alias";
 import svelte from "rollup-plugin-svelte";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
@@ -69,6 +71,15 @@ export default {
       dedupe: ["svelte"]
     }),
     commonjs(),
+    // 절대경로 alias 추가하기
+    alias({
+      entries: [
+        {
+          find: "~",
+          replacement: path.resolve(__dirname, "src/")
+        }
+      ]
+    }),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
