@@ -8,6 +8,7 @@ import { terser } from "rollup-plugin-terser";
 import css from "rollup-plugin-css-only";
 import sveltePreprocess from "svelte-preprocess";
 
+// rollup watch 기능(-w)이 동작하는 경우만 개발모드로 판단
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
@@ -20,6 +21,8 @@ function serve() {
   return {
     writeBundle() {
       if (server) return;
+
+      // 서버 생성
       server = require("child_process").spawn(
         "npm",
         ["run", "start", "--", "--dev"],
@@ -36,11 +39,17 @@ function serve() {
 }
 
 export default {
+  // 진입점
   input: "src/main.js",
+  // 번들 출력
   output: {
+    // 번들의 소스맵 파일을 생성, 소스맵은 난독화 파일을 해석하여 성능 향상 .map파일
     sourcemap: true,
+    // 번들 포맷 html의 script에 적합한 포맷
     format: "iife",
+    // 번들의 전역 변수 이름, 'iife' 포멧사용하는경우 필수
     name: "app",
+    // 번들이 생성되는 경로
     file: "public/build/bundle.js"
   },
   plugins: [
