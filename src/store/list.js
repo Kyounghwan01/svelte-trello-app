@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import { v4 as uuidv4 } from "uuid";
 
 const repoLists = JSON.parse(window.localStorage.getItem("lists")) || [];
 
@@ -20,7 +21,7 @@ export const lists = {
     const { title } = payload;
     // 2. _lists가 바뀌고
     _lists.update($lists => {
-      $lists.push({ id: "", title, cards: [] });
+      $lists.push({ id: uuidv4(), title, cards: [] });
       return $lists;
     });
   }

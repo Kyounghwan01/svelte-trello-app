@@ -55,7 +55,7 @@ export default {
   plugins: [
     svelte({
       compilerOptions: {
-        // enable run-time checks when not in production
+        // 개발 모드에서 런타임 검사 활성
         dev: !production
       },
       // 전처리

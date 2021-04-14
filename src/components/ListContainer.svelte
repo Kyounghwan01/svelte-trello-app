@@ -1,15 +1,15 @@
 <script>
+  // lists에 subscribe 함수를 정의했기 때문에 $lists 변수 사용가능
+  import { lists } from "~/store/list";
   import List from "~/components/List.svelte";
   import CreateList from "~/components/CreateList.svelte";
 </script>
 
 <div class="list-container">
   <div class="lists">
-    <List />
-    <List />
-    <List />
-    <List />
-    <!-- <div class="list"></div> -->
+    {#each $lists as list (list.id)}
+      <List />
+    {/each}
   </div>
   <CreateList />
 </div>
