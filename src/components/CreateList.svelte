@@ -1,6 +1,7 @@
 <script>
   import { tick } from "svelte";
   import { lists } from "~/store/list";
+  import { autoFocusout } from "~/actions/autoFocusout";
 
   // lists.add({ title: "nkh!" });
   let isEditMode = false;
@@ -29,7 +30,11 @@
 
 <div class="create-list">
   {#if isEditMode}
-    <div class="edit-mode">
+    <!-- 클릭이 edit-mode 가 아니면 editmode 취소 - svelte action사용 -->
+    <div
+      use:autoFocusout={{ offEditMode, state: isEditMode }}
+      class="edit-mode"
+    >
       <textarea
         bind:value={title}
         bind:this={textareaEl}
