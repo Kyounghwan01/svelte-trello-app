@@ -60,6 +60,10 @@ export default {
       },
       // 전처리
       preprocess: sveltePreprocess({
+        // 전역 scss 설정 컴포넌트의 style이 <style lang="scss"> 일 경우만
+        scss: {
+          prependData: '@import "./src/scss/main.scss";'
+        },
         // css 번들 이후 처리
         postcss: {
           plugins: [require("autoprefixer")()]
