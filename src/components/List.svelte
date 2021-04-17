@@ -1,5 +1,5 @@
 <script>
-  // import CreateCard from "~/components/CreateCard.svelte";
+  import CreateCard from "~/components/CreateCard.svelte";
   import ListTitle from "~/components/ListTitle.svelte";
   // import Card from "~/components/Card.svelte";
 
@@ -17,7 +17,7 @@
         <!-- <Card /> -->
       {/each}
     </div>
-    <!-- <CreateCard /> -->
+    <CreateCard listId={list.id} />
   </div>
 </div>
 
@@ -30,6 +30,7 @@
     box-sizing: border-box;
     white-space: normal;
     margin: 0 4px;
+    line-height: 20px;
 
     :global(&.sortable-ghost) {
       position: relative;

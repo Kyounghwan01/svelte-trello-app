@@ -57,3 +57,14 @@ export const lists = {
     });
   }
 };
+
+export const cards = {
+  add(payload) {
+    const { listId, title } = payload;
+    _lists.update($lists => {
+      const foundList = _find($lists, { id: listId });
+      foundList.cards.push({ id: uuidv4(), title });
+      return $lists;
+    });
+  }
+};
