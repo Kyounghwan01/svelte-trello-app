@@ -2,6 +2,7 @@ import { writable } from "svelte/store";
 import { v4 as uuidv4 } from "uuid";
 import _find from "lodash/find";
 import _remove from "lodash/remove";
+import _cloneDeep from "lodash/cloneDeep";
 
 const repoLists = JSON.parse(window.localStorage.getItem("lists")) || [];
 
@@ -18,6 +19,15 @@ _lists.subscribe($lists => {
 export const lists = {
   // subscribe 참조관계 만듬 (자동 구독 형태로 만듬)
   subscribe: _lists.subscribe,
+  reorder(payload) {
+    const { oldIndex, newIndex } = payload;
+    _lists.update($lists => {
+      const clone = _cloneDeep($lists[oldIndex]);
+      $lists.splice(oldIndex, 1);
+      $lists.splice(newIndex, 0, clone);
+      return $lists;
+    });
+  },
   add(payload) {
     // 1. add함수가 실행되면
     const { title } = payload;

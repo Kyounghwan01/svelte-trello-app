@@ -31,6 +31,25 @@
     white-space: normal;
     margin: 0 4px;
 
+    :global(&.sortable-ghost) {
+      position: relative;
+      opacity: 0.2;
+      &::after {
+        /* 가상요소에 content 필수 */
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: #000;
+        border-radius: 4px;
+      }
+    }
+    :global(&.sortable-chosen) {
+      cursor: move;
+    }
+
     // --stop --run : 상태
     // __inner : 클래스의 부분
     &__inner {
