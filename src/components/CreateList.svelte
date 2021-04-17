@@ -3,7 +3,6 @@
   import { lists } from "~/store/list";
   import { autoFocusout } from "~/actions/autoFocusout";
 
-  // lists.add({ title: "nkh!" });
   let isEditMode = false;
   let title = "";
   let textareaEl;
