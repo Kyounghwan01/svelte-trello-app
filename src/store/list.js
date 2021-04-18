@@ -66,5 +66,24 @@ export const cards = {
       foundList.cards.push({ id: uuidv4(), title });
       return $lists;
     });
+  },
+  edit(payload) {
+    const { listId, cardId, title } = payload;
+    _lists.update($lists => {
+      const foundList = _find($lists, { id: listId });
+      const foundCard = _find(foundList.cards, { id: cardId });
+
+      foundCard.title = title;
+
+      return $lists;
+    });
+  },
+  remove(payload) {
+    const { listId, cardId } = payload;
+    _lists.update($lists => {
+      const foundList = _find($lists, { id: listId });
+      _remove(foundList.cards, { id: cardId });
+      return $lists;
+    });
   }
 };

@@ -1,7 +1,7 @@
 <script>
   import CreateCard from "~/components/CreateCard.svelte";
   import ListTitle from "~/components/ListTitle.svelte";
-  // import Card from "~/components/Card.svelte";
+  import Card from "~/components/Card.svelte";
 
   export let list;
 </script>
@@ -14,7 +14,7 @@
     </div>
     <div class="list__cards">
       {#each list.cards as card (card.id)}
-        <!-- <Card /> -->
+        <Card {card} listId={list.id} />
       {/each}
     </div>
     <CreateCard listId={list.id} />
