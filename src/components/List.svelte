@@ -57,6 +57,7 @@
 
 <style lang="scss">
   .list {
+    word-break: break-all;
     display: inline-block;
     font-size: 16px;
     width: 290px;
