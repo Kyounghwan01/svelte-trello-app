@@ -1,5 +1,5 @@
 <script>
-  import { tick } from "svelte";
+  import { onDestroy, tick, createEventDispatcher } from "svelte";
   import { cards } from "~/store/list";
   import { autoFocusout } from "~/actions/autoFocusout";
 
@@ -9,6 +9,8 @@
   let isEditMode = false;
   let title;
   let textareaEl;
+
+  const dispatch = createEventDispatcher();
 
   function saveCard() {
     if (title.trim()) {
@@ -29,14 +31,20 @@
   async function onEditMode() {
     isEditMode = true;
     title = card.title;
+    dispatch("editMode", true);
     await tick();
     textareaEl && textareaEl.focus();
   }
 
   function offEditMode() {
     isEditMode = false;
+    dispatch("editMode", false);
     title = "";
   }
+
+  onDestroy(() => {
+    offEditMode();
+  });
 </script>
 
 <div class="card">
@@ -75,6 +83,23 @@
     /* 카드의 마지막 요소는 1px */
     &:last-child {
       margin-bottom: 1px;
+    }
+    :global(&.sortable-ghost) {
+      position: relative;
+      opacity: 0.1;
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000000;
+        border-radius: 4px;
+      }
+    }
+    :global(&.sortable-chosen) {
+      cursor: move;
     }
     .title {
       background: #ffffff;

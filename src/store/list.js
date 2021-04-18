@@ -59,6 +59,20 @@ export const lists = {
 };
 
 export const cards = {
+  reorder(payload) {
+    const { fromListId, toListId, oldIndex, newIndex } = payload;
+    _lists.update($lists => {
+      const fromList = _find($lists, { id: fromListId });
+      const toList =
+        fromListId === toListId ? fromList : _find($lists, { id: toListId });
+      const clone = _cloneDeep(fromList.cards[oldIndex]);
+
+      fromList.cards.splice(oldIndex, 1);
+      toList.cards.splice(newIndex, 0, clone);
+
+      return $lists;
+    });
+  },
   add(payload) {
     const { listId, title } = payload;
     _lists.update($lists => {

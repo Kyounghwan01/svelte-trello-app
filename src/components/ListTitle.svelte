@@ -1,5 +1,5 @@
 <script>
-  import { tick, createEventDispatcher } from "svelte";
+  import { onDestroy, tick, createEventDispatcher } from "svelte";
   import { lists } from "~/store/list";
   import { autoFocusout } from "~/actions/autoFocusout";
   export let list;
@@ -7,6 +7,8 @@
   let isEditMode = false;
   let title = list.title;
   let textareaEl;
+
+  // 타이틀 수정시 dnd안되게 한다 -> isEditMode가 true이면 부모 컴포넌트 List.svelte에 dispatcher로 값을보내 sortable disabled 시킴
   const dispatch = createEventDispatcher();
 
   function saveTitle() {
@@ -27,13 +29,20 @@
   async function onEditMode() {
     isEditMode = true;
     title = list.title;
+    // List.svelte에 vue로 치면 emit
+    dispatch("editMode", true);
     await tick();
     textareaEl && textareaEl.focus();
   }
 
   function offEditMode() {
     isEditMode = false;
+    dispatch("editMode", false);
   }
+
+  onDestroy(() => {
+    offEditMode();
+  });
 </script>
 
 {#if isEditMode}
