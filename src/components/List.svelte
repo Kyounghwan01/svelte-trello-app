@@ -108,16 +108,6 @@
       overflow-y: auto;
       overflow-x: hidden;
       margin-bottom: 10px;
-      .card {
-        height: 150px;
-        border: 10px solid black;
-        box-sizing: border-box;
-      }
     }
-  }
-
-  .create-card {
-    border: 10px solid red;
-    box-sizing: border-box;
   }
 </style>
