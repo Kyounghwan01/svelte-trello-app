@@ -51,6 +51,13 @@
     font-size: 12px;
     padding: 0 6px;
   }
+  &.disabled {
+    background-color: #f4f5f7;
+    color: #a5adba;
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
 }
 .edit-mode {
   textarea {

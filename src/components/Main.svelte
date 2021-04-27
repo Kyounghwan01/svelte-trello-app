@@ -1,13 +1,18 @@
 <script>
-  import { onMount } from "svelte";
-  import { link } from "svelte-spa-router";
-  import active from "svelte-spa-router/active";
+  import { tick } from "svelte";
   import { lists } from "~/store/list";
+  import { modal } from "~/store/modal";
+  import Modal from "~/components/Modal.svelte";
 
-  onMount(() => {
-    console.log($lists);
-    250, 251, 252;
-  }, []);
+  let title = "";
+  let textInput;
+
+  const toggleModal = async () => {
+    title = "";
+    $modal = !$modal;
+    await tick();
+    if ($modal) textInput && textInput.focus();
+  };
 
   Object.assign(document.body.style, {
     backgroundColor: "rgb(250,251,252)",
@@ -16,6 +21,30 @@
 </script>
 
 <div class="main-container">
+  <Modal showModal={$modal} on:click={toggleModal}>
+    <div class="modal-block">
+      <input
+        bind:value={title}
+        bind:this={textInput}
+        type="text"
+        placeholder="Add board title"
+        class="create-board-input"
+        on:keydown={event => {
+          // event.key === "enter" && addBoard();
+          event.key === "Escape" && toggleModal();
+          event.key === "Esc" && toggleModal();
+        }}
+      />
+
+      <div class="btn-group">
+        <div class={title.length ? "btn success" : "btn disabled"}>
+          Create board
+        </div>
+        <div class="btn" on:click={toggleModal}>Cancel</div>
+      </div>
+    </div>
+  </Modal>
+
   <div class="main-container__title">
     <div class="main-container__title__logo">P</div>
     <div class="main-container__title__desc">Personal boards</div>
@@ -29,7 +58,9 @@
       </span>
     {/each}
 
-    <div class="main-container__content__create-board">Create new Board</div>
+    <div class="main-container__content__create-board" on:click={toggleModal}>
+      Create new Board
+    </div>
   </div>
 </div>
 
@@ -70,6 +101,7 @@
       display: grid;
       grid-gap: 10px;
       grid-template-columns: 1fr 1fr 1fr 1fr;
+      position: relative;
       .overlay {
         position: relative;
         display: inline-block;
@@ -83,6 +115,8 @@
         }
         p {
           position: absolute;
+          top: 10px;
+          left: 10px;
           width: 150px;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -108,18 +142,15 @@
       }
       &__create-board {
         background-color: rgba(9, 30, 66, 0.04);
-        box-shadow: none;
         border: none;
         color: #172b4d;
-        display: table-cell;
         height: 100px;
         font-weight: 400;
-        text-align: center;
-        vertical-align: middle;
         width: 200px;
-        transition-property: background-color, border-color, box-shadow;
-        transition-duration: 85ms;
-        transition-timing-function: ease;
+        transition: 0.5s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         &:hover {
           background-color: rgba(9, 30, 66, 0.08);
           box-shadow: none;
@@ -128,6 +159,42 @@
           cursor: pointer;
         }
       }
+    }
+  }
+
+  .modal-block {
+    width: 250px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    .create-board-input {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none;
+      box-sizing: border-box;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 30px;
+      margin-bottom: 4px;
+      padding: 2px 8px;
+      &::placeholder {
+        color: #eee;
+      }
+
+      &:hover {
+        background: hsla(0, 0%, 100%, 0.15) !important;
+        box-shadow: none;
+      }
+      &:focus {
+        background: hsla(0, 0%, 100%, 0.3) !important;
+        box-shadow: none;
+        outline: none;
+      }
+    }
+    .btn-group {
+      text-align: right;
     }
   }
 </style>
