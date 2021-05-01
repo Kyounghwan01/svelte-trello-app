@@ -1,6 +1,7 @@
 <script>
   import { tick } from "svelte";
-  import { lists } from "~/store/list";
+  // import { lists } from "~/store/list";
+  import { boards } from "~/store/board";
   import { modal } from "~/store/modal";
   import Modal from "~/components/Modal.svelte";
 
@@ -14,8 +15,20 @@
     if ($modal) textInput && textInput.focus();
   };
 
+  const addBoard = () => {
+    if (title.trim()) {
+      boards.add({ title });
+    }
+    toggleModal();
+  };
+
+  const changeFavorite = (e, id) => {
+    e.stopPropagation();
+    boards.changeFavorite({ id });
+  };
+
   Object.assign(document.body.style, {
-    backgroundColor: "rgb(250,251,252)",
+    backgroundColor: "#eeeeee",
     backgroundImage: ""
   });
 </script>
@@ -30,14 +43,17 @@
         placeholder="Add board title"
         class="create-board-input"
         on:keydown={event => {
-          // event.key === "enter" && addBoard();
+          event.key === "Enter" && addBoard();
           event.key === "Escape" && toggleModal();
           event.key === "Esc" && toggleModal();
         }}
       />
 
       <div class="btn-group">
-        <div class={title.length ? "btn success" : "btn disabled"}>
+        <div
+          class={title.length ? "btn success" : "btn disabled"}
+          on:click={addBoard}
+        >
           Create board
         </div>
         <div class="btn" on:click={toggleModal}>Cancel</div>
@@ -45,21 +61,50 @@
     </div>
   </Modal>
 
-  <div class="main-container__title">
-    <div class="main-container__title__logo">P</div>
-    <div class="main-container__title__desc">Personal boards</div>
+  <div class="main-container__board">
+    <div class="main-container__title">
+      <i class="far fa-star" />
+      <div class="main-container__title__desc">Stared boards</div>
+    </div>
+
+    <div class="main-container__content">
+      {#each $boards as board}
+        {#if board.star}
+          <span class="overlay">
+            <p>{board.title}</p>
+            <i
+              class="fas fa-star"
+              on:click={e => changeFavorite(e, board.id)}
+            />
+            <img src="/bg.jpeg" class="img-responsive" alt="about img 2" />
+          </span>
+        {/if}
+      {/each}
+    </div>
   </div>
 
-  <div class="main-container__content">
-    {#each $lists as list}
-      <span class="overlay">
-        <p>{list.title}</p>
-        <img src="/bg.jpeg" class="img-responsive" alt="about img 2" />
-      </span>
-    {/each}
+  <div class="main-container__board">
+    <div class="main-container__title">
+      <div class="main-container__title__logo">P</div>
+      <div class="main-container__title__desc">Personal boards</div>
+    </div>
 
-    <div class="main-container__content__create-board" on:click={toggleModal}>
-      Create new Board
+    <div class="main-container__content">
+      {#each $boards as board}
+        <span class="overlay">
+          <p>{board.title}</p>
+          <i
+            class="far fa-star"
+            style="color: white; display: none"
+            on:click={e => changeFavorite(e, board.id)}
+          />
+          <img src="/bg.jpeg" class="img-responsive" alt="about img 2" />
+        </span>
+      {/each}
+
+      <div class="main-container__content__create-board" on:click={toggleModal}>
+        Create new Board
+      </div>
     </div>
   </div>
 </div>
@@ -69,9 +114,17 @@
     width: 60%;
     padding: 30px;
     margin: 0 auto;
+
+    &__board {
+      margin-bottom: 30px;
+    }
     &__title {
       display: flex;
       margin-bottom: 20px;
+      i {
+        font-size: 20px;
+        line-height: 30px;
+      }
       &__logo {
         background: linear-gradient(#b22865, #cd5a91);
         display: flex;
@@ -106,6 +159,11 @@
         position: relative;
         display: inline-block;
         width: 200px;
+        i {
+          position: absolute;
+          bottom: 10px;
+          right: 10px;
+        }
         img {
           width: 200px;
           background-size: cover;
@@ -139,6 +197,13 @@
           opacity: 0.23;
           cursor: pointer;
         }
+        &:hover {
+          i {
+            display: block !important;
+            cursor: pointer;
+            transition: 1s ease;
+          }
+        }
       }
       &__create-board {
         background-color: rgba(9, 30, 66, 0.04);
@@ -160,6 +225,10 @@
         }
       }
     }
+  }
+
+  .star {
+    background: linear-gradient(#cc4223, #cb7d25);
   }
 
   .modal-block {
