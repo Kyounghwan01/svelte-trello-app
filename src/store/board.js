@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
 import { v4 as uuidv4 } from "uuid";
 import _find from "lodash/find";
 import _remove from "lodash/remove";
@@ -7,6 +7,7 @@ import _cloneDeep from "lodash/cloneDeep";
 const repoBoards = JSON.parse(window.localStorage.getItem("board")) || [];
 
 const _boards = writable(repoBoards);
+export const boardId = writable("");
 
 _boards.subscribe($boards => {
   // 4. localStore에 바뀐 리스트가 저장됨
@@ -17,33 +18,49 @@ _boards.subscribe($boards => {
 export const boards = {
   // subscribe 참조관계 만듬 (자동 구독 형태로 만듬)
   subscribe: _boards.subscribe,
-  // reorder(payload) {
-  //   const { oldIndex, newIndex } = payload;
-  //   _boards.update($lists => {
-  //     const clone = _cloneDeep($lists[oldIndex]);
-  //     $lists.splice(oldIndex, 1);
-  //     $lists.splice(newIndex, 0, clone);
-  //     return $lists;
-  //   });
-  // },
+  reorder(payload) {
+    // todo : list에서 reorder
+    const { oldIndex, newIndex } = payload;
+    _boards.update($boards => {
+      const clone = _cloneDeep($boards[oldIndex]);
+      $boards.splice(oldIndex, 1);
+      $boards.splice(newIndex, 0, clone);
+      return $boards;
+    });
+  },
   add(payload) {
     // 1. add함수가 실행되면
     const { title } = payload;
     // 2. _boards가 바뀌고
     _boards.update($boards => {
-      $boards.push({ id: uuidv4(), title, lists: [], group: "", star: false });
+      $boards.push({
+        id: uuidv4(),
+        title,
+        lists: [],
+        group: "",
+        star: false
+      });
       return $boards;
     });
   },
   changeFavorite(payload) {
     const { id } = payload;
     _boards.update($boards => {
-      const foundBoard = _find($boards, { id: id });
+      const foundBoard = _find($boards, { id });
       foundBoard.star = !foundBoard.star;
 
       return $boards;
     });
   },
+  addList(payload) {
+    const { title } = payload;
+    _boards.update($boards => {
+      const foundBoard = _find($boards, { id: get(boardId) });
+      foundBoard.lists.push({ id: uuidv4(), title, cards: [] });
+      return $boards;
+    });
+  },
+
   edit(payload) {
     const { listId, title } = payload;
     _boards.update($lists => {

@@ -1,6 +1,7 @@
 <script>
-  import { tick } from "svelte";
+  import { onMount, tick } from "svelte";
   import { lists } from "~/store/list";
+  import { boards } from "~/store/board";
   import { autoFocusout } from "~/actions/autoFocusout";
 
   let isEditMode = false;
@@ -9,7 +10,7 @@
 
   function addList() {
     if (title.trim()) {
-      lists.add({ title });
+      boards.addList({ title });
     }
     offEditMode();
   }
