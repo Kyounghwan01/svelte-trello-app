@@ -1,11 +1,9 @@
 <script>
   import { onMount } from "svelte";
   import { parse } from "qs";
-  import { push, querystring } from "svelte-spa-router";
+  import { querystring } from "svelte-spa-router";
   import Sortable from "sortablejs";
   import { boards, boardId } from "~/store/board";
-  // lists에 subscribe 함수를 정의했기 때문에 $lists 변수 사용가능
-  import { lists } from "~/store/list";
   import List from "~/components/List.svelte";
   import CreateList from "~/components/CreateList.svelte";
 
