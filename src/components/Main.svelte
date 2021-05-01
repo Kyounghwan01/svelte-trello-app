@@ -1,6 +1,6 @@
 <script>
   import { tick } from "svelte";
-  // import { lists } from "~/store/list";
+  import { push } from "svelte-spa-router";
   import { boards } from "~/store/board";
   import { modal } from "~/store/modal";
   import Modal from "~/components/Modal.svelte";
@@ -27,11 +27,19 @@
     boards.changeFavorite({ id });
   };
 
+  const goBoard = id => {
+    push(`/board?id=${id}`);
+  };
+
   Object.assign(document.body.style, {
     backgroundColor: "#eeeeee",
     backgroundImage: ""
   });
 </script>
+
+<svelte:head>
+  <title>Trello-clone!</title>
+</svelte:head>
 
 <div class="main-container">
   <Modal showModal={$modal} on:click={toggleModal}>
@@ -70,7 +78,7 @@
     <div class="main-container__content">
       {#each $boards as board}
         {#if board.star}
-          <span class="overlay">
+          <span class="overlay" on:click={() => goBoard(board.id)}>
             <p>{board.title}</p>
             <i
               class="fas fa-star"
@@ -91,10 +99,10 @@
 
     <div class="main-container__content">
       {#each $boards as board}
-        <span class="overlay">
+        <span class="overlay" on:click={() => goBoard(board.id)}>
           <p>{board.title}</p>
           <i
-            class="far fa-star"
+            class={board.star ? "fas fa-star" : "far fa-star"}
             style="color: white; display: none"
             on:click={e => changeFavorite(e, board.id)}
           />

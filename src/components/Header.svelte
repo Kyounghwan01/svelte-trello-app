@@ -24,6 +24,10 @@
       width: 80px;
       opacity: 0.5;
     }
+    img:hover {
+      cursor: pointer;
+      opacity: 0.1;
+    }
   }
 
   .main-logo-background {

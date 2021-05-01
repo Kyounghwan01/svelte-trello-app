@@ -4,6 +4,23 @@ _Looking for a shareable component template? Go here --> [sveltejs/component-tem
 
 ---
 
+## svelte-spa-router
+
+### router 이동할때 push
+
+push('/');
+
+### location
+
+console.log($location) -> '/board/'
+
+### querystring
+
+import { parse } from "qs";
+import { querystring } from "svelte-spa-router";
+
+console.log(parse($querystring)); -> {"id": "xxx"}
+
 # svelte app
 
 This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
