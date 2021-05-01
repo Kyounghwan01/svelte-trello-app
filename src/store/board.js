@@ -19,12 +19,12 @@ export const boards = {
   // subscribe 참조관계 만듬 (자동 구독 형태로 만듬)
   subscribe: _boards.subscribe,
   reorder(payload) {
-    // todo : list에서 reorder
     const { oldIndex, newIndex } = payload;
     _boards.update($boards => {
-      const clone = _cloneDeep($boards[oldIndex]);
-      $boards.splice(oldIndex, 1);
-      $boards.splice(newIndex, 0, clone);
+      const foundBoard = _find($boards, { id: get(boardId) });
+      const clone = _cloneDeep(foundBoard.lists[oldIndex]);
+      foundBoard.lists.splice(oldIndex, 1);
+      foundBoard.lists.splice(newIndex, 0, clone);
       return $boards;
     });
   },
@@ -57,6 +57,23 @@ export const boards = {
     _boards.update($boards => {
       const foundBoard = _find($boards, { id: get(boardId) });
       foundBoard.lists.push({ id: uuidv4(), title, cards: [] });
+      return $boards;
+    });
+  },
+  removeList(payload) {
+    const { listId } = payload;
+    _boards.update($boards => {
+      const foundBoard = _find($boards, { id: get(boardId) });
+      _remove(foundBoard.lists, { id: listId });
+      return $boards;
+    });
+  },
+  editList(payload) {
+    const { listId, title } = payload;
+    _boards.update($boards => {
+      const foundBoard = _find($boards, { id: get(boardId) });
+      const foundList = _find(foundBoard.lists, { id: listId });
+      foundList.title = title;
       return $boards;
     });
   },

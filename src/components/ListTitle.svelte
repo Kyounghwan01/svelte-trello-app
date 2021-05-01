@@ -1,6 +1,6 @@
 <script>
   import { onDestroy, tick, createEventDispatcher } from "svelte";
-  import { lists } from "~/store/list";
+  import { boards } from "~/store/board";
   import { autoFocusout } from "~/actions/autoFocusout";
   export let list;
 
@@ -13,7 +13,7 @@
 
   function saveTitle() {
     if (title.trim()) {
-      lists.edit({
+      boards.editList({
         listId: list.id,
         title
       });
@@ -22,7 +22,7 @@
   }
 
   function removeList() {
-    lists.remove({ listId: list.id });
+    boards.removeList({ listId: list.id });
     offEditMode();
   }
 

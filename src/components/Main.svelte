@@ -78,7 +78,7 @@
     <div class="main-container__content">
       {#each $boards as board}
         {#if board.star}
-          <span class="overlay">
+          <span class="overlay" on:click={() => goBoard(board.id)}>
             <p>{board.title}</p>
             <i
               class="fas fa-star"

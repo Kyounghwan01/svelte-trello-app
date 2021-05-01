@@ -34,7 +34,7 @@
       forceFallback: true, // 크로스브라우징 이슈로 sortable rnd만 사용
       onEnd(event) {
         console.log(event);
-        lists.reorder({
+        boards.reorder({
           oldIndex: event.oldIndex,
           newIndex: event.newIndex
         });
