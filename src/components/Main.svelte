@@ -37,6 +37,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Trello-clone!</title>
+</svelte:head>
+
 <div class="main-container">
   <Modal showModal={$modal} on:click={toggleModal}>
     <div class="modal-block">

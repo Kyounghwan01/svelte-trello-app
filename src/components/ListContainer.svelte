@@ -50,6 +50,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>{newList.title} | Trello-clone</title>
+</svelte:head>
+
 <div class="list-container">
   <div class="lists" bind:this={listsEl}>
     {#each newList.lists as list (list.id)}
