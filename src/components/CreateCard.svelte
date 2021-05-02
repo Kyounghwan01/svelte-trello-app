@@ -1,6 +1,6 @@
 <script>
   import { onDestroy, tick, createEventDispatcher } from "svelte";
-  import { cards } from "~/store/list";
+  import { cards } from "~/store/board";
   import { autoFocusout } from "~/actions/autoFocusout";
 
   export let listId;
@@ -13,7 +13,7 @@
 
   function addCard() {
     if (title.trim()) {
-      cards.add({ listId, title });
+      cards.addCard({ listId, title });
     }
     offEditMode();
   }
@@ -50,7 +50,7 @@
       }}
     />
     <div class="actions">
-      <div class="btn success" on:click={addCard}>Add List</div>
+      <div class="btn success" on:click={addCard}>Add Card</div>
       <div class="btn" on:click={offEditMode}>Cancel</div>
     </div>
   </div>

@@ -81,9 +81,6 @@ export const boards = {
   edit(payload) {
     const { listId, title } = payload;
     _boards.update($lists => {
-      // const foundList = $lists.find(l => {
-      //   return l.id === listId;
-      // });
       const foundList = _find($lists, { id: listId });
       foundList.title = title;
 
@@ -102,43 +99,46 @@ export const boards = {
 export const cards = {
   reorder(payload) {
     const { fromListId, toListId, oldIndex, newIndex } = payload;
-    _boards.update($lists => {
-      const fromList = _find($lists, { id: fromListId });
+    _boards.update($boards => {
+      const foundBoard = _find($boards, { id: get(boardId) });
+      const fromList = _find(foundBoard.lists, { id: fromListId });
       const toList =
-        fromListId === toListId ? fromList : _find($lists, { id: toListId });
+        fromListId === toListId
+          ? fromList
+          : _find(foundBoard.lists, { id: toListId });
       const clone = _cloneDeep(fromList.cards[oldIndex]);
 
       fromList.cards.splice(oldIndex, 1);
       toList.cards.splice(newIndex, 0, clone);
-
-      return $lists;
+      return $boards;
     });
   },
-  add(payload) {
+  addCard(payload) {
     const { listId, title } = payload;
-    _boards.update($lists => {
-      const foundList = _find($lists, { id: listId });
+    _boards.update($board => {
+      const foundBoard = _find($board, { id: get(boardId) });
+      const foundList = _find(foundBoard.lists, { id: listId });
       foundList.cards.push({ id: uuidv4(), title });
-      return $lists;
+      return $board;
     });
   },
-  edit(payload) {
+  editCard(payload) {
     const { listId, cardId, title } = payload;
-    _boards.update($lists => {
-      const foundList = _find($lists, { id: listId });
+    _boards.update($board => {
+      const foundBoard = _find($board, { id: get(boardId) });
+      const foundList = _find(foundBoard.lists, { id: listId });
       const foundCard = _find(foundList.cards, { id: cardId });
-
       foundCard.title = title;
-
-      return $lists;
+      return $board;
     });
   },
-  remove(payload) {
+  removeCard(payload) {
     const { listId, cardId } = payload;
-    _boards.update($lists => {
-      const foundList = _find($lists, { id: listId });
+    _boards.update($board => {
+      const foundBoard = _find($board, { id: get(boardId) });
+      const foundList = _find(foundBoard.lists, { id: listId });
       _remove(foundList.cards, { id: cardId });
-      return $lists;
+      return $board;
     });
   }
 };
