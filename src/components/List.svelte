@@ -15,7 +15,7 @@
   function disableSortable(event) {
     // event.detail 자식에서 부모로 값 올리는 dispatcher
     // 자식에서 dispatch("editMode", true); 로 보내면 event.detail = true;
-
+    if (!sortableLists) return;
     sortableCards.option("disabled", event.detail);
     sortableLists.option("disabled", event.detail);
   }

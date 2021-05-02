@@ -1,4 +1,4 @@
-import { writable, get } from "svelte/store";
+import { writable, get, derived } from "svelte/store";
 import { v4 as uuidv4 } from "uuid";
 import _find from "lodash/find";
 import _remove from "lodash/remove";
@@ -8,6 +8,10 @@ const repoBoards = JSON.parse(window.localStorage.getItem("board")) || [];
 
 const _boards = writable(repoBoards);
 export const boardId = writable("");
+export const boardData = derived([boardId, _boards], ([$boardId, $_boards]) => {
+  const boardData = _find($_boards, { id: $boardId });
+  return boardData || "";
+});
 
 _boards.subscribe($boards => {
   // 4. localStore에 바뀐 리스트가 저장됨
