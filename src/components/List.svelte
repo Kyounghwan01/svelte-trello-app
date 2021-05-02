@@ -4,7 +4,7 @@
   import CreateCard from "~/components/CreateCard.svelte";
   import ListTitle from "~/components/ListTitle.svelte";
   import Card from "~/components/Card.svelte";
-  import { cards } from "~/store/list";
+  import { cards } from "~/store/board";
 
   export let list;
   export let sortableLists;

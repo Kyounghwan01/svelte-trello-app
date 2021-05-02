@@ -1,6 +1,5 @@
 <script>
-  import { onMount, tick } from "svelte";
-  import { lists } from "~/store/list";
+  import { tick } from "svelte";
   import { boards } from "~/store/board";
   import { autoFocusout } from "~/actions/autoFocusout";
 

@@ -1,6 +1,6 @@
 <script>
   import { onDestroy, tick, createEventDispatcher } from "svelte";
-  import { cards } from "~/store/list";
+  import { cards } from "~/store/board";
   import { autoFocusout } from "~/actions/autoFocusout";
 
   export let card;
@@ -14,7 +14,7 @@
 
   function saveCard() {
     if (title.trim()) {
-      cards.edit({
+      cards.editCard({
         listId,
         cardId: card.id,
         title
@@ -24,7 +24,7 @@
   }
 
   function removeCard() {
-    cards.remove({ listId, cardId: card.id });
+    cards.removeCard({ listId, cardId: card.id });
     offEditMode();
   }
 
