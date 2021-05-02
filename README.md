@@ -4,6 +4,12 @@ _Looking for a shareable component template? Go here --> [sveltejs/component-tem
 
 ---
 
+## todo
+
+- board group 추가
+- list 화면에서 group option으로 보여주고 선택하거나 input에 적도록 추가
+- main화면에서 board 삭제 기능
+
 ## svelte-spa-router
 
 ### router 이동할때 push
