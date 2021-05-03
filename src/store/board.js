@@ -56,6 +56,13 @@ export const boards = {
       return $boards;
     });
   },
+  deleteBoard(payload) {
+    const { id } = payload;
+    _boards.update($board => {
+      _remove($board, { id });
+      return $board;
+    });
+  },
   addList(payload) {
     const { title } = payload;
     _boards.update($boards => {
