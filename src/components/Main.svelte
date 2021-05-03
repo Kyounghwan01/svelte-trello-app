@@ -27,6 +27,11 @@
     boards.changeFavorite({ id });
   };
 
+  const deleteBoard = (e, id) => {
+    e.stopPropagation();
+    boards.deleteBoard({ id });
+  };
+
   const goBoard = id => {
     push(`/board?id=${id}`);
   };
@@ -102,6 +107,11 @@
         <span class="overlay" on:click={() => goBoard(board.id)}>
           <p>{board.title}</p>
           <i
+            class="fas fa-backspace delete-btn"
+            style="color: white; display: none;"
+            on:click={e => deleteBoard(e, board.id)}
+          />
+          <i
             class={board.star ? "fas fa-star" : "far fa-star"}
             style="color: white; display: none"
             on:click={e => changeFavorite(e, board.id)}
@@ -171,6 +181,13 @@
           position: absolute;
           bottom: 10px;
           right: 10px;
+        }
+
+        .delete-btn {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          height: 20px;
         }
         img {
           width: 200px;
