@@ -63,6 +63,15 @@ export const boards = {
       return $board;
     });
   },
+  changeBoardTitle(payload) {
+    const { title } = payload;
+    _boards.update($boards => {
+      const foundBoard = _find($boards, { id: get(boardId) });
+      foundBoard.title = title;
+
+      return $boards;
+    });
+  },
   addList(payload) {
     const { title } = payload;
     _boards.update($boards => {
