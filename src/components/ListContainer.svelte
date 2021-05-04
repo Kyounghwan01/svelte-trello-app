@@ -65,7 +65,7 @@
   .list-container {
     width: 100vw;
     height: calc(100vh - 80px);
-    padding: 30px;
+    padding: 20px 30px;
     /* box-sizing: border: padding이 있는경우 영역을 넘어가는 경우가 있는데 그것을 막기위해 사용 */
     box-sizing: border-box;
     overflow-x: auto;
