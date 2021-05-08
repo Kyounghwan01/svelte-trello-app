@@ -1,12 +1,33 @@
 <script>
   import { tick } from "svelte";
-  import { push, location } from "svelte-spa-router";
+  import { parse } from "qs";
+  import _find from "lodash/find";
+  import { push, location, querystring } from "svelte-spa-router";
   import { boardData, boards } from "~/store/board";
   import { autoFocusout } from "~/actions/autoFocusout";
+  import { window } from "lodash/_freeGlobal";
 
   let editTitleMode = false;
   let title = "";
   let textInput;
+
+  let selectId = "";
+  let titleList = [];
+
+  $: {
+    titleList = [
+      { title: "Jump to..." },
+      ...$boards
+        .filter(({ id }) => id !== parse($querystring).id)
+        .map(({ title, id }) => ({ title, id }))
+    ];
+  }
+
+  $: {
+    if (selectId) {
+      push(`/refresh?id=${selectId}`);
+    }
+  }
 
   const onEditMode = async () => {
     editTitleMode = true;
@@ -63,6 +84,14 @@
       style={$boardData.star ? "color: #f2d600" : "color: white"}
       on:click={() => boards.changeFavorite({ id: $boardData.id })}
     />
+
+    {#if titleList.length > 1}
+      <select bind:value={selectId}>
+        {#each titleList as { title, id }, index (index)}
+          <option value={id}>{title}</option>
+        {/each}
+      </select>
+    {/if}
   </div>
 {/if}
 
@@ -127,6 +156,14 @@
         cursor: pointer;
       }
     }
+  }
+
+  select {
+    background-color: rgba(0, 0, 0, 0.16);
+    outline: none;
+    opacity: 0.5;
+    width: 150px;
+    color: #ffffff;
   }
 
   .main-logo-background {
