@@ -5,9 +5,10 @@
   import { push, location, querystring } from "svelte-spa-router";
   import { boardData, boards } from "~/store/board";
   import { autoFocusout } from "~/actions/autoFocusout";
-  import { window } from "lodash/_freeGlobal";
+  import GroupModal from "~/components/GroupModal.svelte";
 
   let editTitleMode = false;
+  let groupModalMode = false;
   let title = "";
   let textInput;
 
@@ -54,11 +55,13 @@
     src="/trello-logo.svg"
     alt="Trello"
     class="logo"
-    on:click={() => push("/")}
+    on:click={() => {
+      groupModalMode = false;
+      push("/");
+    }}
   />
 </header>
 {#if $location === "/board"}
-  <!-- todo: 그룹 지정하기 -->
   <div class="list-header">
     {#if !editTitleMode}
       <h1 on:click={onEditMode}>{$boardData.title}</h1>
@@ -92,10 +95,27 @@
         {/each}
       </select>
     {/if}
+
+    <div class="list-header__group" on:click={() => (groupModalMode = true)}>
+      {!$boardData.group ? "Personal" : $boardData.group}
+    </div>
   </div>
+
+  {#if groupModalMode}
+    <div class="group-modal">
+      <GroupModal on:changeGroupModal={e => (groupModalMode = e.detail)} />
+    </div>
+  {/if}
 {/if}
 
 <style lang="scss">
+  .group-modal {
+    position: fixed;
+    will-change: top, left;
+    top: 100px;
+    left: 270px;
+  }
+
   header {
     height: 40px;
     box-sizing: border-box;
@@ -151,6 +171,22 @@
       text-align: center;
       line-height: 32px;
 
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.24);
+        cursor: pointer;
+      }
+    }
+
+    &__group {
+      display: inline-block;
+      background-color: rgba(0, 0, 0, 0.16);
+      border-radius: 3px;
+      color: #fff;
+      font-size: 14px;
+      height: 32px;
+      text-align: center;
+      line-height: 32px;
+      padding: 0 10px;
       &:hover {
         background-color: rgba(0, 0, 0, 0.24);
         cursor: pointer;
