@@ -55,7 +55,10 @@
     src="/trello-logo.svg"
     alt="Trello"
     class="logo"
-    on:click={() => push("/")}
+    on:click={() => {
+      groupModalMode = false;
+      push("/");
+    }}
   />
 </header>
 {#if $location === "/board"}
@@ -93,11 +96,9 @@
       </select>
     {/if}
 
-    {#if !$boardData.group}
-      <div class="list-header__group" on:click={() => (groupModalMode = true)}>
-        Personal
-      </div>
-    {/if}
+    <div class="list-header__group" on:click={() => (groupModalMode = true)}>
+      {!$boardData.group ? "Personal" : $boardData.group}
+    </div>
   </div>
 
   {#if groupModalMode}

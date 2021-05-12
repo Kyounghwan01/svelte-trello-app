@@ -1,10 +1,54 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { onMount, createEventDispatcher, tick } from "svelte";
+  import { boardData, boards } from "~/store/board";
+  import _uniqBy from "lodash/uniqBy";
+
   const dispatch = createEventDispatcher();
 
   let step = 2;
+  let groupTitle = "";
+  let groupArray = [];
+  let textInput;
+
+  onMount(() => {
+    if ($boardData.group) {
+      groupTitle = $boardData.group;
+    }
+
+    getGroupArray();
+  });
+
+  $: {
+    if (groupTitle === "create") {
+      goStep3();
+    }
+  }
+
+  const getGroupArray = () => {
+    groupArray = _uniqBy(
+      $boards.filter(board => board.group).map(board => board.group)
+    );
+  };
+
+  const goStep3 = async () => {
+    groupTitle = "";
+    step = 3;
+    await tick();
+    textInput && textInput.focus();
+  };
 
   const changeGroupModal = () => {
+    dispatch("changeGroupModal", false);
+  };
+
+  const goBack = () => {
+    step = step - 1;
+    groupTitle = "";
+  };
+
+  const assignGroup = () => {
+    boards.assignGroup({ title: groupTitle });
+    getGroupArray();
     dispatch("changeGroupModal", false);
   };
 </script>
@@ -13,10 +57,10 @@
   <div class="group-modal__header">
     <i
       class={`fas fa-chevron-left ${step === 1 ? "invisible" : ""}`}
-      on:click={() => (step = step - 1)}
+      on:click={goBack}
     />
     <div class="group-modal__header__title">
-      <span>Add to Workspace</span>
+      <span>{step === 3 ? "Create" : "Change"} Workspace</span>
     </div>
     <i class="fas fa-times" on:click={changeGroupModal} />
   </div>
@@ -35,23 +79,35 @@
         class="btn success group-modal__content__btn"
         on:click={() => (step = 2)}
       >
-        Add to Workspace
+        Change Workspace
+      </div>
+    {:else if step === 3}
+      <div class="group-modal__content__step-2__label">Workspace type</div>
+      <input
+        type="text"
+        bind:this={textInput}
+        bind:value={groupTitle}
+        placeholder="토이프로젝트"
+      />
+      <div
+        class={`btn group-modal__content__btn ${
+          !groupTitle ? "disabled" : "success"
+        }`}
+        on:click={assignGroup}
+      >
+        Create Workspace
       </div>
     {:else}
       <div class="group-modal__content__step-2__label">Your Workspaces</div>
-      <!-- select option -> Create a new Workspace이면 step3, 
-        label - Workspace name
-        text input
-        add to workspace 버튼 disabled
-
-
-        option에서 선택했으면 addf to workspace success로 바꾸고 버튼 누르면 group 활성화
-      -->
-      <div
-        class="btn group-modal__content__btn disabled"
-        on:click={() => (step = 2)}
-      >
-        Add to Workspace
+      <select bind:value={groupTitle}>
+        <option value="">none</option>
+        {#each groupArray as group, index (index)}
+          <option>{group}</option>
+        {/each}
+        <option value="create">Create new Workspace</option>
+      </select>
+      <div class="btn group-modal__content__btn success" on:click={assignGroup}>
+        Change Workspace
       </div>
     {/if}
   </div>
@@ -125,5 +181,20 @@
 
   .invisible {
     visibility: hidden;
+  }
+
+  input,
+  select {
+    min-height: 36px;
+    background-color: #fafbfc;
+    box-shadow: inset 0 0 0 2px #dfe1e6;
+    border-radius: 3px;
+    -webkit-appearance: none;
+    border: none;
+    width: 100%;
+    padding-left: 12px;
+    background-size: 20px;
+    background-position: right 8px center;
+    outline: none;
   }
 </style>

@@ -113,6 +113,16 @@ export const boards = {
       _remove($lists, { id: listId });
       return $lists;
     });
+  },
+  assignGroup(payload) {
+    const { title } = payload;
+
+    _boards.update($lists => {
+      const foundList = _find($lists, { id: get(boardId) });
+      foundList.group = title;
+
+      return $lists;
+    });
   }
 };
 
