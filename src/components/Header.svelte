@@ -98,22 +98,20 @@
 
     <div class="list-header__group" on:click={() => (groupModalMode = true)}>
       {!$boardData.group ? "Personal" : $boardData.group}
+      {#if groupModalMode}
+        <div class="group-modal">
+          <GroupModal on:changeGroupModal={e => (groupModalMode = e.detail)} />
+        </div>
+      {/if}
     </div>
   </div>
-
-  {#if groupModalMode}
-    <div class="group-modal">
-      <GroupModal on:changeGroupModal={e => (groupModalMode = e.detail)} />
-    </div>
-  {/if}
 {/if}
 
 <style lang="scss">
   .group-modal {
-    position: fixed;
-    will-change: top, left;
-    top: 100px;
-    left: 270px;
+    position: absolute;
+    left: 0px;
+    top: 40px;
   }
 
   header {
@@ -179,6 +177,7 @@
 
     &__group {
       display: inline-block;
+      position: relative;
       background-color: rgba(0, 0, 0, 0.16);
       border-radius: 3px;
       color: #fff;
