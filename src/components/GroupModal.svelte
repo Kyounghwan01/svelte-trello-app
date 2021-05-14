@@ -5,13 +5,14 @@
 
   const dispatch = createEventDispatcher();
 
-  let step = 2;
+  let step = 1;
   let groupTitle = "";
   let groupArray = [];
   let textInput;
 
   onMount(() => {
     if ($boardData.group) {
+      step = 2;
       groupTitle = $boardData.group;
     }
 
@@ -37,7 +38,8 @@
     textInput && textInput.focus();
   };
 
-  const changeGroupModal = () => {
+  const changeGroupModal = e => {
+    e.stopPropagation();
     dispatch("changeGroupModal", false);
   };
 
@@ -62,7 +64,7 @@
     <div class="group-modal__header__title">
       <span>{step === 3 ? "Create" : "Change"} Workspace</span>
     </div>
-    <i class="fas fa-times" on:click={changeGroupModal} />
+    <i class="fas fa-times" on:click={e => changeGroupModal(e)} />
   </div>
   <div class="group-modal__content">
     {#if step === 1}
