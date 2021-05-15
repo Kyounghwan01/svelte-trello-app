@@ -74,6 +74,8 @@
     </div>
   </Modal>
 
+  <button class="add-btn" on:click={toggleModal}>+</button>
+
   <div class="main-container__board">
     <div class="main-container__title">
       <i class="far fa-star" />
@@ -86,13 +88,46 @@
           <span class="overlay" on:click={() => goBoard(board.id)}>
             <p>{board.title}</p>
             <i
-              class="fas fa-star"
+              class="far fa-star"
+              style="color: rgb(210,180,31)"
               on:click={e => changeFavorite(e, board.id)}
             />
             <img src="/bg.jpeg" class="img-responsive" alt="about img 2" />
           </span>
         {/if}
       {/each}
+    </div>
+  </div>
+
+  <!-- group map으로 돌려 -->
+  <div class="main-container__board">
+    <div class="main-container__title">
+      <div class="main-container__title__logo">P</div>
+      <div class="main-container__title__desc">Personal boards</div>
+    </div>
+
+    <div class="main-container__content">
+      {#each $boards as board}
+        <span class="overlay" on:click={() => goBoard(board.id)}>
+          <p>{board.title}</p>
+          <i
+            class="fas fa-backspace delete-btn"
+            style="color: white; display: none;"
+            on:click={e => deleteBoard(e, board.id)}
+          />
+          <i
+            class={board.star ? "fas fa-star" : "far fa-star"}
+            style="color: white; display: none"
+            on:click={e => changeFavorite(e, board.id)}
+          />
+          <img src="/bg.jpeg" class="img-responsive" alt="about img 2" />
+        </span>
+      {/each}
+
+      <div class="main-container__content__create-board" on:click={toggleModal}>
+        <!-- 이친구는 자동으로 group이 들어가야함 -->
+        Create new Board
+      </div>
     </div>
   </div>
 
@@ -289,6 +324,27 @@
     }
     .btn-group {
       text-align: right;
+    }
+  }
+
+  .add-btn {
+    position: fixed;
+    top: 4px;
+    right: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    height: 32px;
+    width: 32px;
+    margin: 0 10px 0 0;
+    font-size: 32px;
+    border: none;
+    border-radius: 3px;
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
 </style>
