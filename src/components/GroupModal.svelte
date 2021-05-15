@@ -48,7 +48,8 @@
     groupTitle = "";
   };
 
-  const assignGroup = () => {
+  const assignGroup = e => {
+    e.stopPropagation();
     boards.assignGroup({ title: groupTitle });
     getGroupArray();
     dispatch("changeGroupModal", false);
@@ -95,7 +96,7 @@
         class={`btn group-modal__content__btn ${
           !groupTitle ? "disabled" : "success"
         }`}
-        on:click={assignGroup}
+        on:click={e => assignGroup(e)}
       >
         Create Workspace
       </div>
@@ -108,7 +109,10 @@
         {/each}
         <option value="create">Create new Workspace</option>
       </select>
-      <div class="btn group-modal__content__btn success" on:click={assignGroup}>
+      <div
+        class="btn group-modal__content__btn success"
+        on:click={e => assignGroup(e)}
+      >
         Change Workspace
       </div>
     {/if}

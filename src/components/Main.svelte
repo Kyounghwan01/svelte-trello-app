@@ -4,11 +4,30 @@
   import { boards } from "~/store/board";
   import { modal } from "~/store/modal";
   import Modal from "~/components/Modal.svelte";
+  import _find from "lodash/find";
 
   let title = "";
   let textInput;
+  let workspaces = [];
+  let createGruopBoard = "";
 
-  const toggleModal = async () => {
+  $: {
+    let newArry = [];
+    $boards.forEach(board => {
+      const boardData = newArry.findIndex(el => el.title === board.group);
+      if (boardData === -1) {
+        newArry.push({ title: board.group, data: [board] });
+      } else {
+        newArry[boardData].data.push(board);
+      }
+    });
+    workspaces = newArry;
+  }
+
+  const toggleModal = async groupName => {
+    if (groupName) {
+      createGruopBoard = groupName;
+    }
     title = "";
     $modal = !$modal;
     await tick();
@@ -17,7 +36,8 @@
 
   const addBoard = () => {
     if (title.trim()) {
-      boards.add({ title });
+      console.log(createGruopBoard);
+      boards.add({ title, group: createGruopBoard });
     }
     toggleModal();
   };
@@ -99,38 +119,6 @@
     </div>
   </div>
 
-  <!-- group map으로 돌려 -->
-  <div class="main-container__board">
-    <div class="main-container__title">
-      <div class="main-container__title__logo">P</div>
-      <div class="main-container__title__desc">Personal boards</div>
-    </div>
-
-    <div class="main-container__content">
-      {#each $boards as board}
-        <span class="overlay" on:click={() => goBoard(board.id)}>
-          <p>{board.title}</p>
-          <i
-            class="fas fa-backspace delete-btn"
-            style="color: white; display: none;"
-            on:click={e => deleteBoard(e, board.id)}
-          />
-          <i
-            class={board.star ? "fas fa-star" : "far fa-star"}
-            style="color: white; display: none"
-            on:click={e => changeFavorite(e, board.id)}
-          />
-          <img src="/bg.jpeg" class="img-responsive" alt="about img 2" />
-        </span>
-      {/each}
-
-      <div class="main-container__content__create-board" on:click={toggleModal}>
-        <!-- 이친구는 자동으로 group이 들어가야함 -->
-        Create new Board
-      </div>
-    </div>
-  </div>
-
   <div class="main-container__board">
     <div class="main-container__title">
       <div class="main-container__title__logo">P</div>
@@ -160,6 +148,41 @@
       </div>
     </div>
   </div>
+
+  {#each workspaces as workspace}
+    <div class="main-container__board">
+      <div class="main-container__title">
+        <div class="main-container__title__logo">{workspace.title[0]}</div>
+        <div class="main-container__title__desc">{workspace.title}</div>
+      </div>
+
+      <div class="main-container__content">
+        {#each workspace.data as board}
+          <span class="overlay" on:click={() => goBoard(board.id)}>
+            <p>{board.title}</p>
+            <i
+              class="fas fa-backspace delete-btn"
+              style="color: white; display: none;"
+              on:click={e => deleteBoard(e, board.id)}
+            />
+            <i
+              class={board.star ? "fas fa-star" : "far fa-star"}
+              style="color: white; display: none"
+              on:click={e => changeFavorite(e, board.id)}
+            />
+            <img src="/bg.jpeg" class="img-responsive" alt="about img 2" />
+          </span>
+        {/each}
+
+        <div
+          class="main-container__content__create-board"
+          on:click={() => toggleModal(workspace.title)}
+        >
+          Create new Board
+        </div>
+      </div>
+    </div>
+  {/each}
 </div>
 
 <style lang="scss">

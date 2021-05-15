@@ -34,14 +34,14 @@ export const boards = {
   },
   add(payload) {
     // 1. add함수가 실행되면
-    const { title } = payload;
+    const { title, group } = payload;
     // 2. _boards가 바뀌고
     _boards.update($boards => {
       $boards.push({
         id: uuidv4(),
         title,
         lists: [],
-        group: "",
+        group,
         star: false
       });
       return $boards;
