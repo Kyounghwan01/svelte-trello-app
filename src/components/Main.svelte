@@ -15,10 +15,12 @@
     let newArry = [];
     $boards.forEach(board => {
       const boardData = newArry.findIndex(el => el.title === board.group);
+      if (!board.group.length) return;
+
       if (boardData === -1) {
         newArry.push({ title: board.group, data: [board] });
       } else {
-        newArry[boardData].data.push(board);
+        newArry[boardData].data?.push(board);
       }
     });
     workspaces = newArry;
@@ -143,7 +145,10 @@
         </span>
       {/each}
 
-      <div class="main-container__content__create-board" on:click={toggleModal}>
+      <div
+        class="main-container__content__create-board"
+        on:click={() => toggleModal()}
+      >
         Create new Board
       </div>
     </div>
